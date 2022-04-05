@@ -5,7 +5,7 @@ fetch('https://gist.githubusercontent.com/alex-oleshkevich/6946d85bf075a60490273
     .then(res => res.json())
     .then(json => {
         regionsArray = json[0].regions;
-    for (let region of regionsArray) {
+    for (let region of regionsArray){
         const countryOption = document.createElement('option');
         const countrySelect = document.getElementById('countrySelect');
     countryOption.innerHTML = region["name"];
@@ -25,19 +25,22 @@ fetch('https://gist.githubusercontent.com/alex-oleshkevich/6946d85bf075a60490273
 })
 
 function getCityNames(){
-    for (let citiesName of citiesArray) {
+    for (let citiesName of citiesArray){
         let cityOption = document.createElement('option');
         let citySelect = document.getElementById('citySelect');
         cityOption.innerHTML = citiesName['name'];
         citySelect.appendChild(cityOption);
-        document.querySelector('#countrySelect').addEventListener('click', function () {
-            let a =document.getElementById('nameOption')
-            a.remove();
-        })
+        removeNameOption()
     }
 }
 
-document.querySelector('#citySelect').addEventListener('change', function (){
+function removeNameOption(){
+    document.querySelector('#countrySelect').addEventListener('click', function(){
+        document.getElementById('nameOption').remove();
+    })
+}
+
+document.querySelector('#citySelect').addEventListener('change', function(){
     let cityNam = this.value
     let lat, lon
     async function getCitiByName(){
@@ -52,7 +55,7 @@ document.querySelector('#citySelect').addEventListener('change', function (){
     async function getCityByCoord(){
         const coordResponse = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=7c219a3a9d67598fdeca2282d88817c7`);
         const coordCityData = await coordResponse.json();
-        for(let i = 2; i<=7;i++){
+        for (let i = 2; i<=7;i++){
             document.querySelector(`.temp${i}`).innerHTML = Math.round(coordCityData.daily[i-1].temp.max - 273) + '&deg;';
         }
     }
